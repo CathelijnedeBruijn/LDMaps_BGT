@@ -141,7 +141,6 @@ export function init(opts: {
 
     //methode die wordt aangeroepen om de marker te sluiten
     let onHoverOff = function(this: L.Marker) {
-      this.closePopup();
       this.setIcon(DefaultIcon);
     }.bind(marker);
 
@@ -152,9 +151,9 @@ export function init(opts: {
     marker.on("mouseout", onHoverOff);
 
     //wanneer je er op klikt ga naar die marker
-    marker.on("click", () => {
+    marker.on("click", function (this : L.Marker)  {
       opts.onClick(feature.properties);
-
+      this.openPopup()
     });
 
     return marker;
