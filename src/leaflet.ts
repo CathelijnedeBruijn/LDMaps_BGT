@@ -72,7 +72,7 @@ export function init(opts: {
   /**
    * De functie die de kaart aanroept elke keer als deze een marker wilt toevoegen.
    **/
-  const addMarker = (feature: GeojsonFeature, latlng: L.LatLng): void => {
+  const addMarker = (feature: GeojsonFeature, latlng: L.LatLng): any => {
     //maak een marker aan
     let marker = L.marker(latlng);
 
@@ -106,8 +106,7 @@ export function init(opts: {
 
     //wanneer je er van af gaat laat het weg
     marker.on("mouseout", onHoverOff);
-
-
+  return marker;
 
   };
 
@@ -124,7 +123,7 @@ export function init(opts: {
       `<div class = "marker">
                       <b>${feature.properties.shapeTooltip}</b>
                       <br/>
-                      <b><a href = feature.properties.registratie>Object in BGT</a></b>
+                      <b><a href= ${feature.properties.registratie} target="_blank">Object in BGT</a></b>
                       <div>
               `,
       {
@@ -141,7 +140,6 @@ export function init(opts: {
 
     //methode die wordt aangeroepen om de marker te sluiten
     let onHoverOff = function(this: L.Marker) {
-      this.closePopup();
       this.setIcon(DefaultIcon);
     }.bind(marker);
 
@@ -152,9 +150,9 @@ export function init(opts: {
     marker.on("mouseout", onHoverOff);
 
     //wanneer je er op klikt ga naar die marker
-    marker.on("click", () => {
+    marker.on("click", function (this : L.Marker)  {
       opts.onClick(feature.properties);
-
+      this.openPopup()
     });
 
     return marker;
@@ -221,45 +219,19 @@ export function updateMap(opts: {
   searchResults?: Reducer.State["searchResults"];
   updateZoom: boolean;
 }) {
-  try {
     map.closePopup();
     markerGroup.clearLayers();
     geoJsonLayer.clearLayers();
-  }catch(e){
-    console.log(e)
-  }
+
 
   // als er een geklikt resultaat is, render dan alleen deze
   if (opts.selectedObject) {
     geoJsonLayer.addData(objectToGeojson(opts.selectedObject));
     map.fitBounds(L.featureGroup([geoJsonLayer, markerGroup]).getBounds() );
   } else if (opts.searchResults.length) {
-    // console.log(geoJsonLayer, markerGroup);
-    try {
-      console.log(opts.searchResults)
-      try {
         let features = getAllObjectsAsFeature(opts.searchResults) as any
-        console.log(features);
-        try {
           geoJsonLayer.addData(features);
-        }
-        catch(e){
-          console.log(e)
-        }
-      }
-      catch(e){
-        console.log(e)
-      }
-      try {
         map.fitBounds(L.featureGroup([geoJsonLayer, markerGroup]).getBounds());
-      }
-      catch (e){
-        console.log(e)
-      }
-    }
-    catch(e){
-      console.log(e)
-    }
   } else if (opts.updateZoom) {
     centerMap();
   }

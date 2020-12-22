@@ -11,8 +11,6 @@ export async function getFromCoordinates(lat : string, lng: string, zoomlevel: n
     precisie = "100"
   }
 
-  console.log(lat, lng, precisie)
-
   const results = await queryTriply(getDataByQuery(lat, lng, precisie));
 
   return await queryResourcesDescriptions(lat, lng, results.results.bindings.map(b => b.registratie.value));

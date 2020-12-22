@@ -75,28 +75,22 @@ const App: React.FC = () => {
      * Update leaflet when search results or selection changes
      */
     React.useEffect(() => {
-        console.log("stateResults:", state.searchResults);
         if (state.selectedObject) {
             try {
-                console.log("we zitten nu in de try van de if")
                 LeafletUtils.updateMap({
                     selectedObject: state.selectedObject,
                     updateZoom: false
                 });
             } catch {
-                console.log("we zitten nu in de catch van de if")
             }
         }
         else {
-            console.log("we zitten boven de try van de else", state.searchResults)
             try {
-                console.log("we zitten nu in de try van de else", state.searchResults)
                 LeafletUtils.updateMap({
                     updateZoom: false,
                     searchResults: state.searchResults
                 });
             } catch(e) {
-                console.log("we zitten nu in de catch van de else ", e)
             }
         }
         ;
