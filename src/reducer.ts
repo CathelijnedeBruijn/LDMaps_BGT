@@ -64,7 +64,6 @@ export const reducer: React.Reducer<State, Action> = immer.produce((state: State
       return state;
     case "coordinate_search_success":
       state.isFetching = false;
-      console.log("search succes " , action.results)
       state.searchResults = action.results;
       return state;
     case "reset":
@@ -74,7 +73,7 @@ export const reducer: React.Reducer<State, Action> = immer.produce((state: State
       return state;
     case "selectObject":
       state.selectedObject = action.value;
-      state.clickedLayer = undefined//might be selected from layer popup
+      state.clickedLayer = undefined; //might be selected from layer popup
       return state;
     case "resetSelectedObject":
       state.selectedObject = undefined;
